@@ -19,5 +19,3 @@ Route::get('/csv/{id}', [CsvController::class, 'show']);
 Route::post('/csv', [CsvController::class, 'store']);
 Route::put('/csv/{id}', [CsvController::class, 'update']);
 Route::delete('/csv/{id}', [CsvController::class, 'destroy']);
-
-

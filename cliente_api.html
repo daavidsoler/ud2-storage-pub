@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cliente API REST</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+        }
+        input, button {
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cliente para la API REST</h1>
+        <div>
+            <h3>GET /api/hello</h3>
+            <button onclick="getHello()">Obtener saludo</button>
+            <div id="getResponse"></div>
+        </div>
+
+        <div>
+            <h3>GET /api/hello/{filename}</h3>
+            <input type="text" id="getFilename" placeholder="Nombre del archivo">
+            <button onclick="getHelloWithFilename()">Obtener saludo con nombre de archivo</button>
+            <div id="getFilenameResponse"></div>
+        </div>
+
+        <div>
+            <h3>POST /api/hello</h3>
+            <input type="text" id="postFilename" placeholder="Nombre del archivo">
+            <input type="text" id="postContent" placeholder="Contenido">
+            <button onclick="postHello()">Enviar mensaje</button>
+            <div id="postResponse"></div>
+        </div>
+
+        <div>
+            <h3>PUT /api/hello/{filename}</h3>
+            <input type="text" id="putFilename" placeholder="Nombre del archivo">
+            <input type="text" id="putContent" placeholder="Nuevo contenido">
+            <button onclick="putHello()">Actualizar mensaje</button>
+            <div id="putResponse"></div>
+        </div>
+
+        <div>
+            <h3>DELETE /api/hello/{filename}</h3>
+            <input type="text" id="deleteFilename" placeholder="Nombre del archivo">
+            <button onclick="deleteHello()">Eliminar archivo</button>
+            <div id="deleteResponse"></div>
+        </div>
+
+        <div>
+            <h3>GET /api/json</h3>
+            <button onclick="getJson()">Obtener JSON</button>
+            <div id="getJsonResponse"></div>
+        </div>
+
+        <div>
+            <h3>GET /api/json/{filename}</h3>
+            <input type="text" id="getJsonFilename" placeholder="Nombre del archivo">
+            <button onclick="getJsonWithFilename()">Obtener JSON con nombre de archivo</button>
+            <div id="getJsonFilenameResponse"></div>
+        </div>
+
+        <div>
+            <h3>POST /api/json</h3>
+            <input type="text" id="postJsonFilename" placeholder="Nombre del archivo">
+            <input type="text" id="postJsonContent" placeholder="Contenido">
+            <button onclick="postJson()">Enviar JSON</button>
+            <div id="postJsonResponse"></div>
+        </div>
+
+        <div>
+            <h3>PUT /api/json/{filename}</h3>
+            <input type="text" id="putJsonFilename" placeholder="Nombre del archivo">
+            <input type="text" id="putJsonContent" placeholder="Nuevo contenido">
+            <button onclick="putJson()">Actualizar JSON</button>
+            <div id="putJsonResponse"></div>
+        </div>
+
+        <div>
+            <h3>DELETE /api/json/{filename}</h3>
+            <input type="text" id="deleteJsonFilename" placeholder="Nombre del archivo">
+            <button onclick="deleteJson()">Eliminar JSON</button>
+            <div id="deleteJsonResponse"></div>
+        </div>
+    </div>
+
+    <script>
+        const baseUrl = 'http://localhost:8002/api/hello';
+        const jsonBaseUrl = 'http://localhost:8002/api/json';
+
+        // GET /api/hello
+        function getHello() {
+            fetch(baseUrl)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('getResponse').innerText = JSON.stringify(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        // GET /api/hello/{filename}
+        function getHelloWithFilename() {
+            const filename = document.getElementById('getFilename').value;
+            fetch(`${baseUrl}/${filename}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('getFilenameResponse').innerText = JSON.stringify(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        // POST /api/hello
+        function postHello() {
+            const filename = document.getElementById('postFilename').value;
+            const content = document.getElementById('postContent').value;
+            fetch(baseUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ filename: filename, content: content })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('postResponse').innerText = JSON.stringify(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        // PUT /api/hello/{filename}
+        function putHello() {
+            const filename = document.getElementById('putFilename').value;
+            const content = document.getElementById('putContent').value;
+            fetch(`${baseUrl}/${filename}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ content: content })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('putResponse').innerText = JSON.stringify(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        // DELETE /api/hello/{filename}
+        function deleteHello() {
+            const filename = document.getElementById('deleteFilename').value;
+            fetch(`${baseUrl}/${filename}`, {
+                method: 'DELETE'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('deleteResponse').innerText = JSON.stringify(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        // GET /api/json
+        function getJson() {
+            fetch(jsonBaseUrl)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('getJsonResponse').innerText = JSON.stringify(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        // GET /api/json/{filename}
+        function getJsonWithFilename() {
+            const filename = document.getElementById('getJsonFilename').value;
+            fetch(`${jsonBaseUrl}/${filename}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('getJsonFilenameResponse').innerText = JSON.stringify(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        // POST /api/json
+        function postJson() {
+            const filename = document.getElementById('postJsonFilename').value;
+            const content = document.getElementById('postJsonContent').value;
+            fetch(jsonBaseUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ filename: filename, content: content })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('postJsonResponse').innerText = JSON.stringify(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        // PUT /api/json/{filename}
+        function putJson() {
+            const filename = document.getElementById('putJsonFilename').value;
+            const content = document.getElementById('putJsonContent').value;
+            fetch(`${jsonBaseUrl}/${filename}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ content: content })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('putJsonResponse').innerText = JSON.stringify(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        // DELETE /api/json/{filename}
+        function deleteJson() {
+            const filename = document.getElementById('deleteJsonFilename').value;
+            fetch(`${jsonBaseUrl}/${filename}`, {
+                method: 'DELETE'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('deleteJsonResponse').innerText = JSON.stringify(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+</body>
+</html>
